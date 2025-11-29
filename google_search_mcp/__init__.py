@@ -41,13 +41,16 @@ async def search(query: str, num_results: int = 10) -> str:
         "num": num_results,
     }
 
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=30.0) as client:
         response = await client.get(GOOGLE_SEARCH_URL, params=params)
 
         if response.status_code != 200:
-            return f"Error: Search request failed with status {response.status_code}"
+            return f"Error: Search request failed with status {response.status_code}: {response.text}"
 
-        data = response.json()
+        try:
+            data = response.json()
+        except ValueError:
+            return "Error: Failed to parse response as JSON"
 
     items = data.get("items", [])
     if not items:
