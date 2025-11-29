@@ -7,7 +7,11 @@ to retrieve information from the internet.
 import os
 
 import httpx
+from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Initialize the MCP server
 mcp = FastMCP("google-search")
